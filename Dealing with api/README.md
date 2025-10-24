@@ -1,4 +1,4 @@
-# Tihs Project deals with public API and displays the data in the UI in an appropriate manner 
+# This Project deals with public API and displays the data in the UI in an appropriate manner 
 
 ## Libraries:
 ### "axios": "^1.12.2",

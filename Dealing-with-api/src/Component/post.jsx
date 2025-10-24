@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom"
-import PostDetails from "./PostDetails"
 import { PostsContext } from "../Context/PostContext"
 import { useContext } from "react"
+
 
 export default function Post(){
 

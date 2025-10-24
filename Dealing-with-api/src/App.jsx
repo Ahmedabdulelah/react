@@ -1,5 +1,4 @@
 import './App.css'
-// import { useState } from 'react'
 import Post from './Component/post'
 import { Route,Routes,Link } from 'react-router-dom'
 import PostDetails from './Component/PostDetails'

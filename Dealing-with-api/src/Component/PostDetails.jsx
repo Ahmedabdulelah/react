@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom"
 import { useContext } from "react"
 import { PostsContext } from "../Context/PostContext"
-import NotFound from "./NotFound"
+import NotFound from "../Component/NotFound"
 
 export default function PostDetails(){
 

@@ -1,31 +1,76 @@
 import { Link } from "react-router-dom"
-import { PostsContext } from "../Context/PostContext"
-import { useContext } from "react"
-
+import { useState, useEffect } from "react"
 
 export default function Post(){
 
-    const posts = useContext(PostsContext)
-    const postList = posts.map((p) => {
+    const [posts, setPosts] = useState([])
+    const [loading, setLoading] = useState(true)
+    const [limit, setLimit] = useState(1)
+    const [search, setSearch] = useState("")
+    const [allposts, setAllPosts] = useState([])
+    
+
+    useEffect(()=>{
+
+        async function FetchPosts(){
+            try{
+                const response = await fetch(`https://jsonplaceholder.typicode.com/posts?_page=${limit}&_limit=10`)
+                const data = await response.json()
+                setPosts(prev => [...prev, ...data])
+                setAllPosts(prev => [...prev, ...data])
+                setLoading(false)
+            }
+            catch(error){
+                console.log(error)
+            }
+            
+        }
+        
+        FetchPosts()
+
+    },[limit])
+    
+    useEffect(()=>{
+        if(search === ""){
+            setPosts(allposts)
+        }else{
+            const filterPosts = allposts.filter((post)=>{
+                return post.title.split(" ").includes(search)
+            })
+            // console.log(filterPosts)
+            setPosts(filterPosts)
+        }
+    },[search,allposts])
+
+
+
+        if(loading){return(<h1>Loading...</h1>)}
+
+
         return(
-            <Link key={p.id} to={`/postDetails/${p.id}`}>
+            <>
+            <input onChange={(event)=> setSearch(event.target.value)} style={{margin:"10px"}} placeholder="Search here..." type="text" />
+
+
+            {posts.length > 0 ? posts.map(post => (
+
+            <Link style={{width:"100%"}} key={post.id} to={`/postDetails/${post.id}`}>
             <div style={{border:"1px solid #444"}}>
                 <h1>
-                    Title Of Post {p.id} 
+                    Title Of Post {post.id} 
                 </h1>
                 <h2 style={{color:"#432"}}>
-                    {p.title}
+                    {post.title}
                 </h2>
                 <hr />
             </div>
             </Link>
+            ) 
+            
+            ): <p>No Posts</p>}
+            <button onClick={() => setLimit(limit + 1)}>Load more...</button>
+            </>
         )
-    })
+    
 
-
-    return(
-        <>
-        {postList}
-        </>
-    )
 }

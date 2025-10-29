@@ -31,7 +31,7 @@ export default function Post(){
     },[limit])
     
     useEffect(()=>{
-        if(search === ""){
+        if(search == ""){
             setPosts(allposts)
         }else{
             const filterPosts = allposts.filter((post)=>{

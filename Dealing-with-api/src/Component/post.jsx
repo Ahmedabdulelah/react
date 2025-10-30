@@ -7,7 +7,6 @@ export default function Post(){
     const [loading, setLoading] = useState(true)
     const [limit, setLimit] = useState(1)
     const [search, setSearch] = useState("")
-    const [allposts, setAllPosts] = useState([])
     
 
     useEffect(()=>{
@@ -17,7 +16,6 @@ export default function Post(){
                 const response = await fetch(`https://jsonplaceholder.typicode.com/posts?_page=${limit}&_limit=10`)
                 const data = await response.json()
                 setPosts(prev => [...prev, ...data])
-                setAllPosts(prev => [...prev, ...data])
                 setLoading(false)
             }
             catch(error){
@@ -30,18 +28,23 @@ export default function Post(){
 
     },[limit])
     
+    
     useEffect(()=>{
-        if(search == ""){
-            setPosts(allposts)
-        }else{
-            const filterPosts = allposts.filter((post)=>{
-                return post.title.split(" ").includes(search)
-            })
-            // console.log(filterPosts)
-            setPosts(filterPosts)
+        async function SearchPost(){
+            if(search == ""){
+                const response = await fetch(`https://jsonplaceholder.typicode.com/posts?_page=${limit}&_limit=10`)
+                const data = await response.json()
+                setPosts(data)
+            }
+            else{
+                const response = await fetch(`https://jsonplaceholder.typicode.com/posts?title_like=${search}`)
+                const data = await response.json()
+                setPosts(data)
+                // console.log(data)
+            }
         }
-    },[search,allposts])
-
+        SearchPost()
+    }, [search])
 
 
         if(loading){return(<h1>Loading...</h1>)}
